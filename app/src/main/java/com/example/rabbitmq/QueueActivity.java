@@ -29,7 +29,8 @@ public class QueueActivity extends AppCompatActivity {
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
     ArrayList<String> messages;
-    String QUEUE_NAME="thomas";
+    String QUEUE_NAME="tiago";
+    String MY_QUEUE="thomas";
     EditText text;
     TextView queueName;
     Button publish;
@@ -39,7 +40,7 @@ public class QueueActivity extends AppCompatActivity {
         setContentView(R.layout.activity_queue);
         text = findViewById(R.id.text);
         queueName = findViewById(R.id.queueName);
-        queueName.setText("Fila atual: " + QUEUE_NAME);
+        queueName.setText("Enviado para a queue: " + QUEUE_NAME);
         publish = findViewById(R.id.publish);
 
         factory = new ConnectionFactory();
@@ -55,6 +56,7 @@ public class QueueActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         execute();
+
         publish.setOnClickListener(v -> {
             DateFormat df = new SimpleDateFormat(" HH:mm:ss");
             Thread threadQueueSender = new Thread(() -> {
@@ -64,8 +66,8 @@ public class QueueActivity extends AppCompatActivity {
                     channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
                     String message = "[Thomas]: "+ text.getText();
-                    channel.basicPublish("", "hello-world", false, null, message.getBytes("UTF-8"));
-                    messages.add(df.format(Calendar.getInstance().getTime()) + message);
+                    channel.basicPublish("", QUEUE_NAME, false, null, message.getBytes("UTF-8"));
+                    messages.add(df.format(Calendar.getInstance().getTime()) +" "+ message);
                     updateText();
                     updateViews();
                     Log.d("Queue Send", "message sent: " + message);
@@ -99,9 +101,9 @@ public class QueueActivity extends AppCompatActivity {
             try {
                 Connection connection = factory.newConnection();
                 Channel channel = connection.createChannel();
-                channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+                channel.queueDeclare(MY_QUEUE, false, false, false, null);
 
-                channel.basicConsume(QUEUE_NAME, true, (consumerTag, message) -> {
+                channel.basicConsume(MY_QUEUE, true, (consumerTag, message) -> {
                     String response = new String(message.getBody(), "UTF-8");
                     messages.add(response);
                     updateViews();

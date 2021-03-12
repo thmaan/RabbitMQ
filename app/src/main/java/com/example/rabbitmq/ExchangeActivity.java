@@ -113,7 +113,7 @@ public class ExchangeActivity extends AppCompatActivity {
 
                 channel.basicConsume(queueName, true, (consumerTag, message) -> {
                     String response = new String(message.getBody(), "UTF-8");
-                    messages.add(df.format(Calendar.getInstance().getTime())+response);
+                    messages.add(df.format(Calendar.getInstance().getTime()) +" "+ response);
                     updateViews();
                     Log.d("Received", "" + response);
                 }, consumerTag -> {

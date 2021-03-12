@@ -33,6 +33,7 @@ import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
 
 public class MainActivity extends AppCompatActivity {
+
     Button queue_btn;
     Button exchange_btn;
 
@@ -43,9 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
         queue_btn = findViewById(R.id.queue_btn);
         exchange_btn = findViewById(R.id.exchange_btn);
+        queue_btn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, QueueActivity.class)));
 
-        queue_btn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this,QueueActivity.class)));
-
-        exchange_btn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this,ExchangeActivity.class)));
+        exchange_btn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ExchangeActivity.class)));
     }
 }
